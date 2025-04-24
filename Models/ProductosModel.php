@@ -19,15 +19,25 @@ class ProductosModel extends Model{
     }
     
 
-    public function insert($producto=array()){
-        $query = "INSERT INTO productos VALUES (:nombre, :descripcion, :precio, :stock, :imagen_url, :activo, :fecha_creacion)";
+    public function insert($producto = array()){
+        $query = "INSERT INTO productos (codigo_producto, nombre_producto, descripcion, imagen, id_categoria, precio, existencias)
+                  VALUES (:codigo_producto, :nombre_producto, :descripcion, :imagen, :id_categoria, :precio, :existencias)";
         return $this->set_query($query, $producto);
     }
+    
+    
+    
 
-    public function delete($id=''){
-        $query = 'DELETE FROM productos WHERE id = :id';
-        return $this->set_query($query, [':id'=>$id]);
+    public function delete($id = ''){
+        // Paso 1: Eliminar los registros relacionados en detalle_venta
+        $queryDetalle = 'DELETE FROM detalle_venta WHERE id_producto = :id';
+        $this->set_query($queryDetalle, [':id' => $id]);
+    
+        // Paso 2: Eliminar el producto
+        $queryProducto = 'DELETE FROM productos WHERE id_producto = :id';
+        return $this->set_query($queryProducto, [':id' => $id]);
     }
+    
 
     public function update($producto = array()){
         $query = "UPDATE productos SET 

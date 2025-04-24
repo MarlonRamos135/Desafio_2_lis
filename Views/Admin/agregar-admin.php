@@ -8,7 +8,6 @@
 </head>
 <body background="https://img.freepik.com/foto-gratis/textura-tela-blanca_1154-645.jpg?semt=ais_hybrid&w=740">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="css admin/admin.css">
 
     <header>
         <nav style="background-color: #1d5583;" class="navbar">
@@ -19,7 +18,7 @@
                     </div>
                 </div>
                 <form class="d-flex">
-                    <a class="btn btn-outline-light" href="interfaz_inicioSeccion.php" type="submit"><b>Cerrar Sesión</b></a>
+                    <a class="btn btn-outline-light" href="<?= PATH.'/Login/'?>" type="submit"><b>Cerrar Sesión</b></a>
                 </form>
             </div>
         </nav>
@@ -46,17 +45,17 @@
                 <div class="col-sm-4">
                     <i style="font-size: 23px;" class='bx bx-cart bx-border-circle icon-rosa'></i>
                     <label for="nombre" class="form-label"><b style="color: navy;background-color: white;">Nombre del Producto</b></label>
-                    <input type="text" name="nombre" id="nombre" placeholder="Llena este campo" class="form-control">
+                    <input type="text" name="nombre" id="nombre" placeholder="Llena este campo" class="form-control" value="<?= isset($producto[':nombre']) ? $producto[':nombre'] : '' ?>">
                 </div>
                 <div class="col-sm-4">
                     <i style="font-size: 23px;" class='bx bx-file bx-border-circle icon-rosa'></i>
                     <label for="desc" class="form-label"><b style="color: navy;background-color: white;">Descripción</b></label>
-                    <input type="text" name="desc" placeholder="Llena este campo" class="form-control" id="desc">
+                    <input type="text" name="desc" placeholder="Llena este campo" class="form-control" id="desc" value="<?= isset($producto[':descripcion']) ? $producto[':descripcion'] : '' ?>">
                 </div>
                 <div class="col-sm-4">
                     <i style="font-size: 23px;" class='bx bx-dollar bx-border-circle icon-rosa'></i>
                     <label for="precio" class="form-label"><b style="color: navy;background-color:white;">Precio del producto</b></label>
-                    <input type="number" name="precio" id="precio" min="0" step="0.01" placeholder="Llena este campo" class="form-control">
+                    <input type="number" name="precio" id="precio" min="0" step="0.01" placeholder="Llena este campo" class="form-control" value="<?= isset($producto[':precio']) ? $producto[':precio'] : '' ?>">
                 </div>  
             </div>
             <br><br>
@@ -65,9 +64,10 @@
                     <i style="font-size: 23px;"class='bx bx-spreadsheet bx-border-circle icon-rosa'></i>
                     <label for="categoria" class="form-label"><b style="color:navy;background-color: white;">Categoría</b></label>
                     <select name="categoria" id="categoria" class="form-select">
-                        <option value="Textil">--Seleccione un campo--</option>
-                        <option value="Textil">Textil</option>
-                        <option value="Promocional">Promocional</option>
+                        <option value="">--Seleccione un campo--</option>
+                        <?php foreach ($categorias as $cat): ?>
+                            <option value="<?= $cat['id_categoria'] ?>"><?= $cat['nombre_categoria'] ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="col-sm-4">

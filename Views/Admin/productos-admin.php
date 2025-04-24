@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <form class="d-flex">
-                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/ProductosAdmin' ?>" type="submit"><b>Volver al menú</b></a>
+                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/Admin' ?>" type="submit"><b>Volver al menú</b></a>
                     <a class="btn btn-outline-light m-2" href="<?= PATH.'/Login/' ?>" type="submit"><b>Cerrar Sesión</b></a>
                 </form>
             </div>
@@ -73,7 +73,7 @@
                         </button>
                             <br>
                             <br>
-                            <a href="<?= PATH.'/Productos/Eliminar/'.$producto['id_producto'] ?>" style="background-color: #ce878d; color: black;" class="btn"><b>Eliminar</b></a>
+                            <a href="<?= PATH.'/Admin/eliminar/'.$producto['id_producto'] ?>" style="background-color: #ce878d; color: black;" class="btn"><b>Eliminar</b></a>
                         </td>
                     </tr>
 

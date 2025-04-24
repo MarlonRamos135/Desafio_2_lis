@@ -29,63 +29,71 @@ class AdminController extends Controller {
     }
 
     public function agregarProductos(){
-        $this->render("agregar-admin.php");
+        $viewBag = [];
+        $viewBag['categorias'] = $this->catModel->get();
+        $this->render("agregar-admin.php", $viewBag);
     }
 
-    public function crear(){
+    public function crear() {
+        error_log("POST: " . print_r($_POST, true));
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errores = [];
             $viewBag = [];
-        
-            $producto = [
-                ':nombre_producto' => $_POST['nombre'],
-                ':descripcion' => $_POST['desc'],
-                ':imagen' => $_POST['img'],
-                ':categoria' => $_POST['categoria'],
-                ':precio' => $_POST['precio'],
-                ':existencias' => $_POST['cantidad']
-            ];
-        
+    
             // Validaciones
             if (empty($_POST['nombre']) || empty($_POST['desc']) || empty($_POST['img']) || empty($_POST['categoria']) || empty($_POST['precio']) || empty($_POST['cantidad'])) {
-                $errores[] = "Debes llenar todos los campos";
+                $errores[] = "Debes llenar todos los campos.";
             }
-        
+    
             if (!isText($_POST['nombre'])) {
                 $errores[] = "El nombre no es válido.";
             }
-        
+    
             if (!isPositive($_POST['precio'])) {
                 $errores[] = "El precio no es válido.";
             }
-        
+    
             if (!isPositive($_POST['cantidad'])) {
                 $errores[] = "La cantidad no es válida.";
             }
-        
-            // Mostrar errores si existen
+    
+            // Armar el producto solo si no hay errores
+            $producto = [
+                'codigo_producto' => strtoupper(substr($_POST['nombre'], 0, 4)) . mt_rand(1000, 9999),
+                'nombre_producto' => $_POST['nombre'],
+                'descripcion' => $_POST['desc'],
+                'imagen' => $_POST['img'],
+                'id_categoria' => $_POST['categoria'],
+                'precio' => $_POST['precio'],
+                'existencias' => $_POST['cantidad']
+            ];
+    
             if (!empty($errores)) {
                 $viewBag['errores'] = $errores;
                 $viewBag['producto'] = $producto;
+                $viewBag['categorias'] = $this->catModel->get();
                 $this->render("agregar-admin.php", $viewBag);
-                exit();
+                return;
             }
-        
+    
             // Si todo está bien, insertar
             try {
-                $this->model->insert($producto);
-                header('Location: '.PATH.'/Admin/adminProductos'); 
+                error_log("Producto que se va a insertar: " . print_r($producto, true));
+                $resultado = $this->model->insert($producto);
+                error_log("Resultado del insert: " . $resultado);
+                header('Location: ' . PATH . '/Admin/adminProductos');
                 exit;
             } catch (Exception $e) {
                 $errores[] = "Error al agregar el producto: " . $e->getMessage();
                 $viewBag['errores'] = $errores;
                 $viewBag['producto'] = $producto;
+                $viewBag['categorias'] = $this->catModel->get();
                 $this->render("agregar-admin.php", $viewBag);
-                exit();
             }
         }
-        
     }
+    
 
     public function editar($id){
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -105,8 +113,10 @@ class AdminController extends Controller {
     }
 
     public function eliminar($id){
-        $this->model->delete($id[0]);
-        header('Location: '.PATH.'/ProductosAdmin/adminProductos'); 
+        error_log("ID a eliminar: " . print_r($id, true));
+        $resultado = $this->model->delete($id[0]);
+        error_log("Resultado de la eliminación: " . $resultado);
+        header('Location: '.PATH.'/Admin/adminProductos'); 
         exit;
     }
 
