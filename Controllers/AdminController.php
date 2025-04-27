@@ -3,17 +3,25 @@ require_once 'Controller.php';
 require_once 'Models/ProductosModel.php';
 require_once 'Models/CategoriasModel.php';
 require_once 'Utils/validaciones.php';
+require_once 'Utils/session.php';
 
 class AdminController extends Controller {
     private $model; 
     private $catModel;
+    private $userModel;
 
     function __construct(){
         $this->model = new ProductosModel();
         $this->catModel = new CategoriasModel();
+        $this->userModel = new LoginModel();
     }
 
-    
+    public function editar($id){
+        $codigo = $id[0];
+        $viewBag = [];
+        $viewBag['usuarios'] = $this->userModel->get($codigo);
+        $this->render("editar-admin.php", $viewBag);
+    }
 
     public function index(){
         $viewBag['productos'] = $this->model->get();
@@ -26,6 +34,12 @@ class AdminController extends Controller {
         $viewBag['categorias'] = $this->catModel->get();
         $viewBag['productos'] = $this->model->get();
         $this->render("productos-admin.php", $viewBag);
+    }
+
+    public function adminUsuarios(){
+        $viewBag = [];
+        $viewBag['usuarios'] = $this->userModel->get();
+        $this->render("usuarios-admin.php", $viewBag);
     }
 
     public function agregarProductos(){
@@ -95,7 +109,7 @@ class AdminController extends Controller {
     }
     
 
-    public function editar($id){
+    public function editarUsuario($id){
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $producto = [
                 ':id' => $id[0],

@@ -32,7 +32,8 @@
           <div style="text-align: center;">
                 <img style="width: 180px;height: auto;" src="/Desafio_2_lis/Views/Login/img/logo1.jpeg" class="rounded-circle" alt="Registro">
                 <br>
-                <h1>Se ha enviado un correo electrónico de confirmación</h1>
+                <h1>Usuario creado correctamente</h1>
+                <a href="<?= PATH.'/Login/' ?>" class="btn btn-primary">Iniciar Sesión</a>
           </div>
           <br>
           <label for="nombre_completo" class="form-label

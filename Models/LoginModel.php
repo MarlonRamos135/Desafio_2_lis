@@ -3,17 +3,22 @@
 require_once 'Model.php';
 
 class LoginModel extends Model{
-    public function get($id=''){
-        if($id==''){
-            $query = "SELECT * FROM usuarios";
+    public function get($id = ''){
+        if ($id == '') {
+            $query = "SELECT u.*, t.tipo_usuario AS nombre_rol
+                      FROM usuarios u
+                      JOIN tipo_usuarios t ON u.id_tipo_usuario = t.id_tipo_usuario";
             return $this->get_query($query);
-        }
-        else{
-            $query = "SELECT * FROM usuarios WHERE id_Usuario = :id_Usuario";
+        } else {
+            $query = "SELECT u.*, t.tipo_usuario AS nombre_rol
+                      FROM usuarios u
+                      JOIN tipo_usuarios t ON u.id_tipo_usuario = t.id_tipo_usuario
+                      WHERE u.id_Usuario = :id_Usuario";
             return $this->get_query($query, [':id_Usuario' => $id]);
-
         }
     }
+    
+    
 
     public function insert($usuario=array()){
         $query = "INSERT INTO usuarios 

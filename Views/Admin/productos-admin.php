@@ -35,7 +35,7 @@
     <div style="text-align: center;"><img style="width: 178px;height: auto;" src="<?= PATH.'/Views/Admin/imagenes/logo1.jpeg' ?>" class="rounded-circle" alt="admin"></div>
     <br>
 
- <div class="row d-flex justify-content-center">
+    <div class="row d-flex justify-content-center">
         <div class="col-sm-10 col-sm-offset-2">
             <table class="table table-bordered table-striped">
                 <thead>
@@ -143,15 +143,14 @@
                     <?php } ?>
                 </tbody>
             </table>
-        </div>
+    </div>
          <br>
          <br> 
-         
     
-                <div class="col-sm-6" style="text-align: center;" ><a style="background-color: #17456b;color: white;"  class="btn" href="<?= PATH.'/Admin/agregarProductos' ?>"><b>Agregar Producto</b></a>
-                <br>
-                <br>
-                
+    <div class="col-sm-6" style="text-align: center;" >
+        <a style="background-color: #17456b;color: white;"  class="btn" href="<?= PATH.'/Admin/agregarProductos' ?>"><b>Agregar Producto</b></a>
+        <br>
+        <br>  
     </div>
 
 

@@ -32,7 +32,7 @@
         <a href="<?= PATH.'/Admin/adminProductos' ?>" class="col-sm-4 p-5 bg-primary m-4 rounded h1 text-center text-white" style="text-decoration: none;">
             Administrar productos
         </a>
-        <a href="<?= PATH.'/' ?>" class="col-sm-4 p-5 bg-success m-4 rounded h1 text-center text-white" style="text-decoration: none;">
+        <a href="<?= PATH.'/Admin/adminUsuarios' ?>" class="col-sm-4 p-5 bg-success m-4 rounded h1 text-center text-white" style="text-decoration: none;">
             Administrar usuarios
         </a>
     </div>

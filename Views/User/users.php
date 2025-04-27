@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="col-sm-5">
                                     <p style="color: #17456b;"><b>Precio:</b></p>
-                                    <p><?= $producto['precio'] ?></p>
+                                    <p>$<?= $producto['precio'] ?></p>
                                     <p style="color: #17456b;"><b>Cantidad disponible:</b></p>
                                     <p><?= $producto['existencias'] ?></p>
                                     <p style="color: #17456b;"><b>Categoría:</b></p>
@@ -75,7 +75,7 @@
                     </div>
                     <div class="modal-footer">
                         <button style="color: #fff; background-color:#ce878d" type="button" class="btn" data-bs-dismiss="modal"><b>Cerrar</b></button>
-                        <a href="<?= PATH.'/Productos/comprar/'.$producto['id_producto'] ?>" class="btn btn-primary">Comprar</a>
+                        <a href="<?= PATH.'/User/comprar/'.$producto['id_producto'] ?>" class="btn btn-primary">Comprar</a>
                     </div>
                 </div>
             </div>

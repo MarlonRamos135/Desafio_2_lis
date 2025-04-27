@@ -25,56 +25,6 @@ class LoginController extends Controller{
         $this->render("register.php");
     }
 
-    public function sendEmail($correo, $nombre, $token){
-        $mail = new PHPMailer(true);
-
-        try {
-            //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'textilexport24@gmail.com';                     //SMTP username
-            $mail->Password   = 'textilcontra123';                               //SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-            //Recipients
-            $mail->setFrom('textilexport24@gmail.com', 'TextilExports');
-            $mail->addAddress($correo, $nombre);
-
-            $linkVerificacion = $linkVerificacion = 'http://' . $_SERVER['HTTP_HOST'] . PATH . '/Usuarios/accountCreated/' . $token;
-
-            //Content
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = 'Confirmación de correo';
-            $mail->Body    = 'Accede a: <a href="'.$linkVerificacion.'"><b>AQUI</b></a> para verificar tu cuenta.';
-            $mail->Body .= '<br><br>Si no puedes acceder al enlace, copia y pega el siguiente enlace en tu navegador: <br><b>'.$linkVerificacion.'</b>';
-
-            $mail->send();
-        } 
-        catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        }
-    }
-
-    public function accountCreated($param) {
-        if (!empty($param[0])) {
-            $token = $param[0];
-            $usuario = $this->model->verificarToken($token);
-    
-            if (!empty($usuario)) {
-                $idUsuario = $usuario[0]['id_Usuario'];
-                $this->model->Verificado($idUsuario);
-                $this->render('welcome.php');
-                
-            } else {
-                $viewBag['error'] = 'Token inválido o cuenta ya verificada.';
-                return $this->render('verifyUser.php', $viewBag);
-            }
-        }
-    }
-
     public function verifyUser(){
         $this->render('verifyUser.php');
     }
@@ -97,36 +47,43 @@ class LoginController extends Controller{
             if (empty($usuario['nombre_completo']) || empty($usuario['nombre_usuario']) || empty($usuario['telefono']) || empty($usuario['correo']) || empty($usuario['direccion']) || empty($_POST['contrasena'])) {
                 array_push($errores, "Todos los campos son obligatorios.");
                 $this->render("register.php", $viewBag);
+                error_log("Error: " . print_r($errores, true));
                 exit();
             }
             if (!isPhone($usuario['telefono'])) {
                 array_push($errores, "El número de teléfono no es válido.");
                 $this->render("register.php", $viewBag);
+                error_log("Error: " . print_r($errores, true));
                 exit();
             }
             if (!isMail($usuario['correo'])) {
                 array_push($errores, "El correo electrónico no es válido.");
                 $this->render("register.php", $viewBag);
+                error_log("Error: " . print_r($errores, true));
                 exit();
             }
             if (!isText($usuario['nombre_completo'])) {
                 array_push($errores, "El nombre no es válido.");
                 $this->render("register.php", $viewBag);
+                error_log("Error: " . print_r($errores, true));
                 exit();
             }
             if ($this->model->get($usuario['nombre_usuario'])) {
                 array_push($errores, "El nombre de usuario ya existe.");
                 $this->render("register.php", $viewBag);
+                error_log("Error: " . print_r($errores, true));
                 exit();
             }
             if ($this->model->get($usuario['correo'])) {
                 array_push($errores, "El correo electrónico ya existe.");
                 $this->render("register.php", $viewBag);
+                error_log("Error: " . print_r($errores, true));
                 exit();
             }
             if ($this->model->get($usuario['telefono'])) {
                 array_push($errores, "El número de teléfono ya existe.");
                 $this->render("register.php", $viewBag);
+                error_log("Error: " . print_r($errores, true));
                 exit();
             }
     
@@ -134,17 +91,21 @@ class LoginController extends Controller{
                 $viewBag['errores'] = $errores;
                 $viewBag['usuario'] = $usuario;
                 $this->render("register.php", $viewBag);
+                error_log("Error: " . print_r($errores, true));
                 exit();
             }
 
             try {
-                $this->model->insert($usuario);
+                error_log("Usuario: " . print_r($usuario, true));
+                $resultado = $this->model->insert($usuario);
+                error_log("Resultado: " . print_r($resultado, true));
     
                 //$this->sendEmail($usuario['correo'], $usuario['nombre_completo'], $usuario['codigo_verificacion']);
     
                 $this->render('verifyUser.php', $viewBag);
                 exit();
             } catch (Exception $e) {
+                error_log("Error al insertar el usuario: " . $e->getMessage());
                 echo "Error: " . $e->getMessage();
             }
         }

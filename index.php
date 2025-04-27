@@ -3,6 +3,8 @@
 require_once 'Controllers/IndexController.php';
 require_once 'Controllers/AdminController.php';
 require_once 'Controllers/LoginController.php';
+require_once 'Controllers/UserController.php';
+require_once 'Utils/session.php';
 
 const PATH = '/Desafio_2_lis';
 $url = $_SERVER['REQUEST_URI'];

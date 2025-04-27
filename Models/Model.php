@@ -6,6 +6,8 @@ abstract class Model {
     private $password = '';
     private $db_name = 'textilexport_db';
     protected $conn;
+    private $last_id;
+
 
     protected function open_db() {
         try {
@@ -46,11 +48,12 @@ abstract class Model {
         try {
             $this->open_db();
             if (!$this->conn) throw new Exception("Conexión no establecida");
-
+    
             $stm = $this->conn->prepare($query);
             $stm->execute($params);
+            $this->last_id = $this->conn->lastInsertId(); // <-- AQUÍ
             $affectedRows = $stm->rowCount();
-
+    
             $this->close_db();
             return $affectedRows;
         } catch (Exception $e) {
@@ -59,4 +62,10 @@ abstract class Model {
             return 0;
         }
     }
+
+    public function lastInsertId() {
+        return $this->last_id;
+    }
+    
+    
 }
