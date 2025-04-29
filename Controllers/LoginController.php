@@ -15,6 +15,13 @@ class LoginController extends Controller{
         $this->model = new LoginModel();
     }
 
+    public function logout() {
+        session_start();
+        session_destroy();
+        header("Location: " . PATH . "/Login/");
+        exit();
+    }
+
     public function index(){
         $viewBag = [];
         $viewBag['usuarios'] = $this->model->get();
@@ -26,8 +33,37 @@ class LoginController extends Controller{
     }
 
     public function verifyUser(){
-        $this->render('verifyUser.php');
+        $correo = $_POST['correo'];
+        $contrasena = $_POST['contrasena'];
+    
+        $resultado = $this->model->validateLogin($correo);
+    
+        if (!empty($resultado) && password_verify($contrasena, $resultado['contra'])) {
+            // ✅ Guardamos en sesión los datos del usuario
+            $_SESSION['usuario'] = [
+                'id' => $resultado['id_Usuario'],  // corregido con "U" mayúscula
+                'correo' => $resultado['correo'],
+                'nombre' => $resultado['nombre_usuario'],
+                'tipo' => $resultado['id_tipo_usuario']
+            ];            
+    
+            $tipoUsuario = $resultado['id_tipo_usuario'];
+    
+            if ($tipoUsuario == 1) {
+                header('Location: ' . PATH . '/Admin/');
+            } elseif ($tipoUsuario == 2) {
+                header('Location: ' . PATH . '/User/');
+            } else {
+                header('Location: ' . PATH . '/Login/');
+            }
+            exit();
+        } else {
+            $viewBag['errores'] = "Correo o contraseña incorrectos.";
+            $this->render('index.php', $viewBag);
+        }
     }
+    
+    
 
     public function createUser(){
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -39,52 +75,29 @@ class LoginController extends Controller{
             $usuario['telefono'] = $_POST['telefono'];
             $usuario['correo'] = $_POST['correo'];
             $usuario['direccion'] = $_POST['direccion'];
-            $usuario['id_tipo_usuario'] = 1;
-            $usuario['codigo_verificacion'] = bin2hex(random_bytes(32));
-            $usuario['verificado'] = 0;
+            $usuario['id_tipo_usuario'] = 2; // Puedes cambiarlo si quieres manejar distintos tipos.
             $usuario['contra'] = password_hash($_POST['contrasena'], PASSWORD_BCRYPT);
     
             if (empty($usuario['nombre_completo']) || empty($usuario['nombre_usuario']) || empty($usuario['telefono']) || empty($usuario['correo']) || empty($usuario['direccion']) || empty($_POST['contrasena'])) {
-                array_push($errores, "Todos los campos son obligatorios.");
-                $this->render("register.php", $viewBag);
-                error_log("Error: " . print_r($errores, true));
-                exit();
+                $errores[] = "Debes llenar todos los campos.";
             }
             if (!isPhone($usuario['telefono'])) {
-                array_push($errores, "El número de teléfono no es válido.");
-                $this->render("register.php", $viewBag);
-                error_log("Error: " . print_r($errores, true));
-                exit();
+                $errores[] = "El número de teléfono no es válido.";
             }
             if (!isMail($usuario['correo'])) {
-                array_push($errores, "El correo electrónico no es válido.");
-                $this->render("register.php", $viewBag);
-                error_log("Error: " . print_r($errores, true));
-                exit();
+                $errores[] = "El correo electrónico no es válido.";
             }
             if (!isText($usuario['nombre_completo'])) {
-                array_push($errores, "El nombre no es válido.");
-                $this->render("register.php", $viewBag);
-                error_log("Error: " . print_r($errores, true));
-                exit();
+                $errores[] = "El nombre completo no es válido.";
             }
             if ($this->model->get($usuario['nombre_usuario'])) {
-                array_push($errores, "El nombre de usuario ya existe.");
-                $this->render("register.php", $viewBag);
-                error_log("Error: " . print_r($errores, true));
-                exit();
+                $errores[] = "El nombre de usuario ya existe.";
             }
             if ($this->model->get($usuario['correo'])) {
-                array_push($errores, "El correo electrónico ya existe.");
-                $this->render("register.php", $viewBag);
-                error_log("Error: " . print_r($errores, true));
-                exit();
+                $errores[] = "El correo electrónico ya existe.";
             }
             if ($this->model->get($usuario['telefono'])) {
-                array_push($errores, "El número de teléfono ya existe.");
-                $this->render("register.php", $viewBag);
-                error_log("Error: " . print_r($errores, true));
-                exit();
+                $errores[] = "El número de teléfono ya existe.";
             }
     
             if (count($errores) > 0) {
@@ -94,13 +107,11 @@ class LoginController extends Controller{
                 error_log("Error: " . print_r($errores, true));
                 exit();
             }
-
+    
             try {
                 error_log("Usuario: " . print_r($usuario, true));
                 $resultado = $this->model->insert($usuario);
                 error_log("Resultado: " . print_r($resultado, true));
-    
-                //$this->sendEmail($usuario['correo'], $usuario['nombre_completo'], $usuario['codigo_verificacion']);
     
                 $this->render('verifyUser.php', $viewBag);
                 exit();
@@ -110,5 +121,6 @@ class LoginController extends Controller{
             }
         }
     }
+    
     
 }

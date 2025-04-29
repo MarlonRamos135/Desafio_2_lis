@@ -6,8 +6,15 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
-<body background="https://img.freepik.com/foto-gratis/textura-tela-blanca_1154-645.jpg?semt=ais_hybrid&w=740">
+<body background="<?= PATH.'/Views/Admin/imagenes/imagen con textura-01.png' ?>">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <?php
+        if (!isset($_SESSION['usuario'])) {
+            header('Location: ' . PATH . '/Login/');
+            exit();
+        }
+    ?>
 
     <header>
         <nav style="background-color: #1d5583;" class="navbar">
@@ -18,7 +25,9 @@
                     </div>
                 </div>
                 <form class="d-flex">
-                    <a class="btn btn-outline-light" href="<?= PATH.'/Login/'?>"><b>Cerrar Sesión</b></a>
+                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/User/' ?>" type="submit"><b>Volver al menú</b></a>
+                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/User/Compras' ?>" type="submit"><b>Compras</b></a>
+                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/Login/logout' ?>" type="submit"><b>Cerrar Sesión</b></a>
                 </form>
             </div>
         </nav>
@@ -26,7 +35,7 @@
     
     <br>
 
-    <form class="container my-5" action="<?= PATH.'/User/pago/'.$productos['']?>" method="POST">
+    <form class="container my-5" action="<?= PATH.'/User/realizarCompra/'.$producto['id_producto'] ?>" method="POST">
 
         <h2 style="color: #17456b;text-align: center;">Pago con Tarjeta de Credito</h2>
         <br>
@@ -53,10 +62,16 @@
                             <input type="number" id="cvv" class="form-control" required>
                         </div>
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label for="vencimiento">Fecha de vencimiento</label>
                             <input type="date" id="vencimiento" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="vencimiento">Cantidad</label>
+                            <input type="number" id="cantidad" name="cantidad" class="form-control" required>
                         </div>
                     </div>
                     

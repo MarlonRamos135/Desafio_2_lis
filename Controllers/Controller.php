@@ -1,6 +1,11 @@
 <?php
 
 abstract class Controller{
+    public function __construct() {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
     public function render($view, $viewBag=[]){
         $file="Views/".static::class."/$view";
         $file = str_replace("Controller","",$file);

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css login/Login.css">
 </head>
 
-<body background="https://img.freepik.com/foto-gratis/textura-tela-blanca_1154-645.jpg?semt=ais_hybrid&w=740">
+<body background="<?= PATH.'/Views/Admin/imagenes/imagen con textura-01.png' ?>">
     
     <header>
         <nav style="background-color: #1d5583;" class="navbar">
@@ -20,6 +20,9 @@
                         <a class="navbar-brand fs-3 text-white"><b>TextilExport</b></a>
                     </div>
                 </div>
+                <form class="d-flex">
+                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/Login/registerUser' ?>" type="submit"><b>Registrarse</b></a>
+                </form>
             </div>
         </nav>
     </header>
@@ -29,8 +32,20 @@
               
             <h1 style="color:#17456b" class="text-center">Bienvenid@s</h1>
             <div style="text-align: center;">
-                <img style="width: 180px;height: auto;" src="imagenes/logo1.jpeg" class="rounded-circle" alt="Registro">
+                <img style="width: 180px;height: auto;" src="<?= PATH.'/Views/Admin/imagenes/logo1.jpeg' ?>" class="rounded-circle" alt="Registro">
             </div>
+
+            <?php
+                if(isset($errores)){
+                    echo "<div class='alert alert-danger'>";
+                    echo "<ul>";
+                    foreach($errores as $error){
+                        echo "<li>$error</li>";
+                    }
+                    echo "</ul>";
+                    echo "</div>";
+                }
+            ?>
 
             <br>
             <i style="font-size: 20px;"class='bx bxs-user-account icon-rosa bx-border-circle'></i>
@@ -40,11 +55,11 @@
             <br>
             <i style="font-size: 20px;" class='bx bxs-lock-alt icon-rosa bx-border-circle'></i>
             <label for="usuario" class="form-label text-white"><b style="color: #17456b">Contraseña</b></label>
-            <input type="text" name="contrasena" id="contrasena" placeholder="Llena este campo" class="form-control" required>
+            <input type="password" name="contrasena" id="contrasena" placeholder="Llena este campo" class="form-control" required>
 
             <br>
             <div class="text-center">
-                <button style="background-color: #17456b" type="submit" class="btn btn"><b style="color: #fff;">Iniciar Sección</b></button>
+                <button style="background-color: #17456b" type="submit" class="btn btn"><b style="color: #fff;">Iniciar Sesión</b></button>
             </div>
         </form>
     </div>

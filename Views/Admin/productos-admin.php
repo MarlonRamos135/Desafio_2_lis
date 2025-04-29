@@ -8,7 +8,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="cssProducto/ver_Producto.css">
 </head>
-<body background="https://img.freepik.com/foto-gratis/textura-tela-blanca_1154-645.jpg?semt=ais_hybrid&w=740">
+<body background="<?= PATH.'/Views/Admin/imagenes/imagen con textura-01.png' ?>">
     
 
     <header>
@@ -21,7 +21,7 @@
                 </div>
                 <form class="d-flex">
                     <a class="btn btn-outline-light m-2" href="<?= PATH.'/Admin' ?>" type="submit"><b>Volver al menú</b></a>
-                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/Login/' ?>" type="submit"><b>Cerrar Sesión</b></a>
+                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/Login/logout' ?>" type="submit"><b>Cerrar Sesión</b></a>
                 </form>
             </div>
         </nav>

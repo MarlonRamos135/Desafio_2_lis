@@ -26,6 +26,15 @@ class ProductosModel extends Model{
     }
     
     
+    public function reducirExistencias($idProducto, $cantidad) {
+        $query = "UPDATE productos 
+                  SET existencias = existencias - :cantidad 
+                  WHERE id_producto = :id_producto";
+        return $this->set_query($query, [
+            ':cantidad' => $cantidad,
+            ':id_producto' => $idProducto
+        ]);
+    }
     
 
     public function delete($id = ''){

@@ -13,7 +13,7 @@
         }
     </style>
 </head>
-<body background="https://img.freepik.com/foto-gratis/textura-tela-blanca_1154-645.jpg?semt=ais_hybrid&w=740">
+<body background="<?= PATH.'/Views/Admin/imagenes/imagen con textura-01.png' ?>">
     <header>
         <nav style="background-color: #1d5583;" class="navbar">
             <div class="container-fluid">
@@ -28,9 +28,22 @@
     <br>
 
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+
+    <?php 
+        if (isset($viewBag['errores']) && count($viewBag['errores']) > 0) {
+            echo "<div class='alert alert-danger'>";
+            echo "<ul>";
+            foreach($viewBag['errores'] as $error){
+                echo "<li>$error</li>";
+            }
+            echo "</ul>";
+            echo "</div>";
+        }
+    ?>
+
     <form action="/Desafio_2_lis/Login/verifyUser" method="POST" class="w-100 p-4 rounded" style="max-width: 400px; background-color: transparent; backdrop-filter: blur(8px); box-shadow: 0 0 10px rgba(0,0,0,0.2);">  
           <div style="text-align: center;">
-                <img style="width: 180px;height: auto;" src="/Desafio_2_lis/Views/Login/img/logo1.jpeg" class="rounded-circle" alt="Registro">
+                <img style="width: 180px;height: auto;" src="/Desafio_2_lis/Views/Login/imagenes/logo1.jpeg" class="rounded-circle" alt="Registro">
                 <br>
                 <h1>Usuario creado correctamente</h1>
                 <a href="<?= PATH.'/Login/' ?>" class="btn btn-primary">Iniciar Sesión</a>

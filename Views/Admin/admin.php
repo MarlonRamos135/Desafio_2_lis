@@ -8,7 +8,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="css publica/publica.css">
 </head>
-<body background="https://img.freepik.com/foto-gratis/textura-tela-blanca_1154-645.jpg?semt=ais_hybrid&w=740">
+<body background="<?= PATH.'/Views/Admin/imagenes/imagen con textura-01.png' ?>">
   
 <header>
     <nav style="background-color: #1d5583;" class="navbar">
@@ -16,8 +16,10 @@
             <a class="navbar-brand d-flex align-items-center text-white" href="#">
                 <b class="fs-3">TextilExport</b>
             </a>
-            
-            <a class="btn btn-outline-light" href="<?= PATH.'/Login/' ?>" type="submit"><b>Cerrar Sesión</b></a>
+            <form class="d-flex">
+                <a class="btn btn-outline-light m-2" href="<?= PATH.'/Admin' ?>" type="submit"><b>Volver al menú</b></a>
+                <a class="btn btn-outline-light m-2" href="<?= PATH.'/Login/logout' ?>" type="submit"><b>Cerrar Sesión</b></a>
+            </form>
         </div>
     </nav>
 </header>
@@ -34,6 +36,9 @@
         </a>
         <a href="<?= PATH.'/Admin/adminUsuarios' ?>" class="col-sm-4 p-5 bg-success m-4 rounded h1 text-center text-white" style="text-decoration: none;">
             Administrar usuarios
+        </a>
+        <a href="<?= PATH.'/Admin/adminCategorias' ?>" class="col-sm-4 p-5 bg-warning m-4 rounded h1 text-center text-dark" style="text-decoration: none;">
+            Administrar categorías
         </a>
     </div>
     

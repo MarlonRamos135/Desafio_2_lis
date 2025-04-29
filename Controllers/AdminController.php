@@ -11,6 +11,14 @@ class AdminController extends Controller {
     private $userModel;
 
     function __construct(){
+
+        parent::__construct(); // Llama al constructor padre para iniciar session_start()
+
+        if (!isset($_SESSION['usuario'])) {
+            header('Location: ' . PATH . '/Login/');
+            exit();
+        }
+
         $this->model = new ProductosModel();
         $this->catModel = new CategoriasModel();
         $this->userModel = new LoginModel();
@@ -18,10 +26,12 @@ class AdminController extends Controller {
 
     public function editar($id){
         $codigo = $id[0];
-        $viewBag = [];
-        $viewBag['usuarios'] = $this->userModel->get($codigo);
+        $usuario = $this->userModel->get($codigo);
+        
+        $viewBag['usuarios'] = $usuario;
         $this->render("editar-admin.php", $viewBag);
     }
+    
 
     public function index(){
         $viewBag['productos'] = $this->model->get();
@@ -34,6 +44,12 @@ class AdminController extends Controller {
         $viewBag['categorias'] = $this->catModel->get();
         $viewBag['productos'] = $this->model->get();
         $this->render("productos-admin.php", $viewBag);
+    }
+
+    public function adminCategorias(){
+        $viewBag = [];
+        $viewBag['categorias'] = $this->catModel->get();
+        $this->render("ver-categorias.php", $viewBag);
     }
 
     public function adminUsuarios(){
@@ -111,20 +127,23 @@ class AdminController extends Controller {
 
     public function editarUsuario($id){
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $producto = [
-                ':id' => $id[0],
-                ':nombre' => $_POST['nombre'],
-                ':descripcion' => $_POST['desc'],
-                ':imagen' => $_POST['img'],
-                ':categoria' => $_POST['categoria'],
-                ':precio' => $_POST['precio'],
-                ':cantidad' => $_POST['cantidad']
+            $usuario = [
+                'id_Usuario' => $id[0],
+                'nombre_completo' => $_POST['nombre_completo'],
+                'nombre_usuario' => $_POST['nombre_usuario'],
+                'telefono' => $_POST['telefono'],
+                'correo' => $_POST['correo'],
+                'direccion' => $_POST['direccion'], // si quieres cambiar la contraseña, si no quieres cambiarla, omítela
+                'id_tipo_usuario' => $_POST['id_tipo_usuario'],
             ];
-            $this->model->update($producto);
-            header('Location: '.PATH.'/Admin/adminProductos'); 
+            error_log("Usuario a editar: " . print_r($usuario, true));
+            $resultado = $this->userModel->update($usuario);
+            error_log("Resultado de la edición: " . $resultado);
+            header('Location: '.PATH.'/Admin/adminUsuarios');
             exit;
         }
     }
+    
 
     public function eliminar($id){
         error_log("ID a eliminar: " . print_r($id, true));
@@ -134,5 +153,35 @@ class AdminController extends Controller {
         exit;
     }
 
+    public function editarCategoria($id){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $categoria = [
+                ':id_categoria' => $id[0],
+                ':nombre_categoria' => $_POST['nombre_categoria']
+            ];
+            $this->catModel->update($categoria);
+            header('Location: '.PATH.'/Admin/adminCategorias'); 
+            exit;
+        }
+    }
+
+    public function agregarCategoria(){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $categoria = [
+                'nombre_categoria' => $_POST['nombre_categoria']
+            ];
+            $this->catModel->insert($categoria);
+            header('Location: '.PATH.'/Admin/adminCategorias'); 
+            exit;
+        }
+    }
+
+    public function eliminarCategoria($id){
+        error_log("ID de categoría a eliminar: " . print_r($id, true));
+        $resultado = $this->catModel->delete($id[0]);
+        error_log("Resultado de la eliminación de categoría: " . $resultado);
+        header('Location: '.PATH.'/Admin/adminCategorias'); 
+        exit;
+    }
 
 }

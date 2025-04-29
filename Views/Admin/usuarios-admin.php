@@ -9,7 +9,7 @@
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
 
-<body background="https://img.freepik.com/foto-gratis/textura-tela-blanca_1154-645.jpg?semt=ais_hybrid&w=740">
+<body background="<?= PATH.'/Views/Admin/imagenes/imagen con textura-01.png' ?>">
 
 
     <header>
@@ -18,8 +18,10 @@
                 <a class="navbar-brand d-flex align-items-center text-white" href="#">
                     <b class="fs-3">TextilExport</b>
                 </a>
-                <a class="btn btn-outline-light" href="interfaz_inicioSeccion.php" type="submit"><b>Cerrar
-                        Sesión</b></a>
+                <form class="d-flex">
+                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/Admin' ?>" type="submit"><b>Volver al menú</b></a>
+                    <a class="btn btn-outline-light m-2" href="<?= PATH.'/Login/logout' ?>" type="submit"><b>Cerrar Sesión</b></a>
+                </form>
             </div>
         </nav>
     </header>
